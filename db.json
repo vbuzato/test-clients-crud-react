@@ -1,0 +1,39 @@
+{
+  "customers": [
+    {
+      "firstname": "Paulo",
+      "lastname": "Alcantra",
+      "cpf": "04689149607",
+      "address": "Av. Run Dev",
+      "birthday": "2021-04-23",
+      "id": 1,
+      "extraAddress": [
+        "Rua distante daqui",
+        "Rua da fazenda"
+      ]
+    },
+    {
+      "extraAddress": [
+        "Av. Run Dev",
+        "Av. Dev 2"
+      ],
+      "firstname": "Matheus",
+      "lastname": "Neves",
+      "cpf": "87003846071",
+      "birthday": "2021-04-24",
+      "address": "Rua da fazenda",
+      "id": 4
+    },
+    {
+      "extraAddress": [
+        "testeeeeeeeeeeeeeeee"
+      ],
+      "firstname": "Vinicius",
+      "cpf": "59754783080",
+      "lastname": "Teste",
+      "address": "Av. Run Dev",
+      "birthday": "2021-04-22",
+      "id": 5
+    }
+  ]
+}

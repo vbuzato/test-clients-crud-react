@@ -4,11 +4,29 @@ import { useHistory, useParams } from 'react-router-dom';
 import { getItemById, insertProduct, updateItemById, verifyCpfDuplicity } from '../api';
 import { cpf } from 'cpf-cnpj-validator';
 
-export default function FormCustomers() {
-  const [customer, setCustomer] = useState({ extraAddress: [] });
+type paramsProps = {
+  id: string;
+}
+
+type customerProps = {
+  id?: string;
+  firstname?: string;
+  lastname?: string;
+  cpf?: any;
+  address?: string;
+  extraAddress: string[];
+  birthday?: string;
+}
+
+type formCustomersProps = {
+  onChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
+}
+
+const FormCustomers: React.FC<formCustomersProps> = () => {
+  const [customer, setCustomer] = useState<customerProps>({ cpf: ' ', extraAddress: [] });
   const [cpfWarning, setCpfWarning] = useState(false);
   const [duplicateCpf, setDuplicateCpf] = useState(false);
-  const { id } = useParams();
+  const { id } = useParams<paramsProps>();
   const history = useHistory();
 
   const fetchCustomer = useCallback(async () => {
@@ -20,23 +38,24 @@ export default function FormCustomers() {
     id && fetchCustomer();
   }, [fetchCustomer, id]);
 
-  const cpfTest = ({ target }) => {
+  const cpfTest = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDuplicateCpf(false);
-    const isCpfValid = customer.cpf === '' || cpf.isValid(target.value);
+    const isCpfValid = customer.cpf === '' || cpf.isValid(e.target.value);
     
-    setCustomer((prev) => ({...prev, cpf: target.value}));
+    setCustomer((prev) => ({...prev, cpf: e.target.value}));
     
     if (!isCpfValid) return setCpfWarning(true);
     setCpfWarning(false);
   }
 
-  const onSubmitForm = async (e) => {
+  const onSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (id) {
       await updateItemById(id, customer);
       history.push('/');
     } else {
+      console.log(customer.cpf)
       const isCpfOk = await verifyCpfDuplicity(customer.cpf);
       if (isCpfOk) {
         setDuplicateCpf(true) 
@@ -47,17 +66,17 @@ export default function FormCustomers() {
     }
   };
 
-  const setExtraAddressOnChange = (e, index) => {
-    const fields = [...customer.extraAddress];
+  const setExtraAddressOnChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const fields: string[] = [...customer.extraAddress];
     fields[index] = e.target.value;
     setCustomer((prev) => ({...prev, extraAddress: fields}))
   }
 
-  const addField = ({ target }) => {
+  const addField = () => {
     setCustomer(prev => ({...prev, extraAddress: [ ...prev.extraAddress, '' ]}))
   }
 
-  const removeField = (index) => {
+  const removeField = (index: number) => {
     const fields = [...customer.extraAddress];
     fields.splice(index, 1)
     setCustomer((prev) => ({...prev, extraAddress: fields}))
@@ -145,7 +164,7 @@ export default function FormCustomers() {
         </Col>
 
         {customer.extraAddress?.map((eachAddress, index) => (
-          <Col sm="12 text-left field-extra-address" key={index}>
+          <Col sm="12" className="field-extra-address" key={index}>
             <Form.Label htmlFor="address" className="w-85 text-left">
             Endereço extra: {index + 1} 
               <input
@@ -177,3 +196,5 @@ export default function FormCustomers() {
     </Container>
   );
 }
+
+export default FormCustomers;

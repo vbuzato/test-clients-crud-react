@@ -34,6 +34,15 @@
       "address": "Av. Run Dev",
       "birthday": "2021-04-22",
       "id": 5
+    },
+    {
+      "cpf": "07292935990",
+      "extraAddress": [],
+      "firstname": "Vinicius",
+      "lastname": "Buzato",
+      "birthday": "2021-04-22",
+      "address": "Rua da fazenda",
+      "id": 6
     }
   ]
 }

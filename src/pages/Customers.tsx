@@ -6,8 +6,18 @@ import { Alert } from 'react-bootstrap';
 import { getAllItems, deleteItemById, onApiError } from '../api';
 import Loading from '../components/Loading';
 
-export default function Customers() {
-  const [customers, setCustomers] = useState();
+type itemProps = {
+  id: string;
+  firstname: string;
+  lastname: string;
+  cpf: string;
+  address: string;
+  extraAddress: string[];
+  birthday: string;
+}
+
+const Customers: React.FC = () => {
+  const [customers, setCustomers] = useState([]);
 
   const fetchCustomers = useCallback(async () => setCustomers(await getAllItems()), []);
 
@@ -15,14 +25,14 @@ export default function Customers() {
     fetchCustomers();
   }, [fetchCustomers]);
 
-  const onDelete = async (id) => {
+  const onDelete = async (id: string) => {
     await deleteItemById(id);
     setCustomers(await getAllItems());
   };
 
   const table = () => {
     if (customers && customers.length === 0) return <Alert variant="secondary">No customers</Alert>;
-    if (customers === onApiError) return <Alert variant="warning">{onApiError}</Alert>;
+    if (customers[0] === onApiError) return <Alert variant="warning">{onApiError}</Alert>;
 
     const indexTable = ["Id", "Nome", "Sobrenome", "CPF", "Endereços", "Data de Nascimento", "Edit", "Delete"];
 
@@ -34,7 +44,7 @@ export default function Customers() {
           </tr>
         </thead>
         <tbody>
-          {customers.map((item) => {
+          {customers.map((item: itemProps) => {
             return (
               <tr key={item.id}>
                 <td>{item.id}</td>
@@ -70,3 +80,5 @@ export default function Customers() {
     </Container>
   );
 }
+
+export default Customers;
